@@ -15,6 +15,6 @@ import java.util.List;
 public class CopyBookDto {
     private long id;
     private String status;
-    private BookTitle bookTitle;
-    private List<BorrowBook> borrowBooks = new ArrayList<>();
+    private BookTitleDto bookTitleDto;
+    private List<BorrowBookDto> borrowBooksDto = new ArrayList<>();
 }

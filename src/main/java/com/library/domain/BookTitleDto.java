@@ -17,5 +17,5 @@ public class BookTitleDto {
     private String title;
     private String Author;
     private int publicationYear;
-    private List<CopyBook> copyBooks = new ArrayList<>();
+    private List<CopyBookDto> copyBooksDto = new ArrayList<>();
 }

@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 public class UserDto {
     private long id;
     private String name;
@@ -19,4 +18,12 @@ public class UserDto {
     private LocalDate creationDate;
     private double account;
     private List<BorrowBook> borrowBooks = new ArrayList<>();
+
+    public UserDto(String name, String lastName, LocalDate creationDate, double account) {
+        this.name = name;
+        this.lastName = lastName;
+        this.creationDate = creationDate;
+        this.account = account;
+    }
+
 }

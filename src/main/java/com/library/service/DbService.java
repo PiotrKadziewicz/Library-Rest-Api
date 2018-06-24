@@ -41,6 +41,10 @@ public class DbService {
         return userRepository.save(user);
     }
 
+    public void deleteUser(long id){
+        userRepository.deleteById(id);
+    }
+
     public List<BookTitle> getAllBookTitles() {
         return bookTitleRepository.findAll();
     }

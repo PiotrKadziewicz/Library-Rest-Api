@@ -48,4 +48,10 @@ public class User {
     )
     private List<BorrowBook> borrowBooks = new ArrayList<>();
 
+    public User(String name, String lastName, LocalDate creationDate, double account) {
+        this.name = name;
+        this.lastName = lastName;
+        this.creationDate = creationDate;
+        this.account = account;
+    }
 }
