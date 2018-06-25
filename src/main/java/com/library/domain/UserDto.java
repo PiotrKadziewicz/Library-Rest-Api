@@ -17,7 +17,7 @@ public class UserDto {
     private String lastName;
     private LocalDate creationDate;
     private double account;
-    private List<BorrowBook> borrowBooks = new ArrayList<>();
+
 
     public UserDto(String name, String lastName, LocalDate creationDate, double account) {
         this.name = name;

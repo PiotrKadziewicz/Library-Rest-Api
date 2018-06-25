@@ -54,4 +54,12 @@ public class User {
         this.creationDate = creationDate;
         this.account = account;
     }
+
+    public User(long id, String name, String lastName, LocalDate creationDate, double account) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.creationDate = creationDate;
+        this.account = account;
+    }
 }

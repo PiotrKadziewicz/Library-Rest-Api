@@ -21,8 +21,7 @@ public class CopyBookMapper {
         return new CopyBook(
                 copyBookDto.getId(),
                 copyBookDto.getStatus(),
-                bookTitleMapper.mapToBookTitle(copyBookDto.getBookTitleDto()),
-                borrowBookMapper.mapToBorrowBookList(copyBookDto.getBorrowBooksDto())
+                bookTitleMapper.mapToBookTitle(copyBookDto.getBookTitleDto())
         );
     }
 
@@ -30,20 +29,19 @@ public class CopyBookMapper {
         return new CopyBookDto(
                 copyBook.getId(),
                 copyBook.getStatus(),
-                bookTitleMapper.mapToBookTitleDto(copyBook.getBookTitle()),
-                borrowBookMapper.mapToBorrowBookDtoList(copyBook.getBorrowBooks())
+                bookTitleMapper.mapToBookTitleDto(copyBook.getBookTitle())
         );
     }
 
     public List<CopyBookDto> mapToCopyBookDtoList(final List<CopyBook> copyBookList) {
         return copyBookList.stream()
-                .map(c -> new CopyBookDto(c.getId(), c.getStatus(), bookTitleMapper.mapToBookTitleDto(c.getBookTitle()), borrowBookMapper.mapToBorrowBookDtoList(c.getBorrowBooks())))
+                .map(c -> new CopyBookDto(c.getId(), c.getStatus(), bookTitleMapper.mapToBookTitleDto(c.getBookTitle())))
                 .collect(Collectors.toList());
     }
 
     public List<CopyBook> mapToCopyBookList(final List<CopyBookDto> copyBookDtoList) {
         return copyBookDtoList.stream()
-                .map(c -> new CopyBook(c.getId(), c.getStatus(), bookTitleMapper.mapToBookTitle(c.getBookTitleDto()), borrowBookMapper.mapToBorrowBookList(c.getBorrowBooksDto())))
+                .map(c -> new CopyBook(c.getId(), c.getStatus(), bookTitleMapper.mapToBookTitle(c.getBookTitleDto())))
                 .collect(Collectors.toList());
     }
 }

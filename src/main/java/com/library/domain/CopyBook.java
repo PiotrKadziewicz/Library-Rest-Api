@@ -14,18 +14,18 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name="BOOKS")
+@Table(name = "BOOKS")
 public class CopyBook {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ID")
+    @Column(name = "ID")
     private long id;
 
-    @Column(name="STATUS")
+    @Column(name = "STATUS")
     private String status;
 
     @ManyToOne
-    @JoinColumn(name="BOOK_TITLE_ID")
+    @JoinColumn(name = "BOOK_TITLE_ID")
     private BookTitle bookTitle;
 
     @OneToMany(
@@ -34,4 +34,15 @@ public class CopyBook {
             mappedBy = "copyBook"
     )
     private List<BorrowBook> borrowBooks = new ArrayList<>();
+
+    public CopyBook(String status, BookTitle bookTitle) {
+        this.status = status;
+        this.bookTitle = bookTitle;
+    }
+
+    public CopyBook(long id, String status, BookTitle bookTitle) {
+        this.id = id;
+        this.status = status;
+        this.bookTitle = bookTitle;
+    }
 }

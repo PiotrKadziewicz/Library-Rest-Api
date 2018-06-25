@@ -37,4 +37,11 @@ public class BorrowBook {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
+
+    public BorrowBook (LocalDate borrowDate, LocalDate returnDate, CopyBook copyBook, User user){
+        this.borrowDate=borrowDate;
+        this.returnDate=returnDate;
+        this.copyBook = copyBook;
+        this.user = user;
+    }
 }

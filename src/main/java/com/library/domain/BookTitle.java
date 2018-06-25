@@ -40,4 +40,18 @@ public class BookTitle {
             mappedBy = "bookTitle"
     )
     private List<CopyBook> copyBooks = new ArrayList<>();
+
+    public BookTitle(String title, String author, int publicationYear) {
+        this.author = author;
+        this.title = title;
+        this.publicationYear = publicationYear;
+    }
+
+    public BookTitle(long id, String title, String author, int publicationYear) {
+        this.id = id;
+        this.author = author;
+        this.title = title;
+        this.publicationYear = publicationYear;
+    }
+
 }

@@ -16,5 +16,4 @@ public class CopyBookDto {
     private long id;
     private String status;
     private BookTitleDto bookTitleDto;
-    private List<BorrowBookDto> borrowBooksDto = new ArrayList<>();
 }

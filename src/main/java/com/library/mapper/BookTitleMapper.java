@@ -18,8 +18,7 @@ public class BookTitleMapper {
                 bookTitleDto.getId(),
                 bookTitleDto.getTitle(),
                 bookTitleDto.getAuthor(),
-                bookTitleDto.getPublicationYear(),
-                copyBookMapper.mapToCopyBookList(bookTitleDto.getCopyBooksDto())
+                bookTitleDto.getPublicationYear()
         );
     }
 
@@ -28,15 +27,13 @@ public class BookTitleMapper {
                 bookTitle.getId(),
                 bookTitle.getTitle(),
                 bookTitle.getAuthor(),
-                bookTitle.getPublicationYear(),
-                copyBookMapper.mapToCopyBookDtoList(bookTitle.getCopyBooks())
-
+                bookTitle.getPublicationYear()
         );
     }
 
     public List<BookTitleDto> mapToBookTitleDtoList(final List<BookTitle> bookTitlesList) {
         return bookTitlesList.stream()
-                .map(b -> new BookTitleDto(b.getId(), b.getTitle(), b.getAuthor(), b.getPublicationYear(), copyBookMapper.mapToCopyBookDtoList(b.getCopyBooks())))
+                .map(b -> new BookTitleDto(b.getId(), b.getTitle(), b.getAuthor(), b.getPublicationYear()))
                 .collect(Collectors.toList());
     }
 }
