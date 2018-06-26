@@ -12,4 +12,7 @@ public interface BorrowBookRepository extends CrudRepository<BorrowBook,Long> {
 
     @Override
     BorrowBook save(BorrowBook borrowBook);
+
+    @Override
+    void deleteById(Long id);
 }

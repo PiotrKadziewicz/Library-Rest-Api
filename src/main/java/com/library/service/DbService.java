@@ -28,7 +28,7 @@ public class DbService {
     @Autowired
     private BorrowBookRepository borrowBookRepository;
 
-
+    //User
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -41,10 +41,11 @@ public class DbService {
         return userRepository.save(user);
     }
 
-    public void deleteUser(long id){
+    public void deleteUser(long id) {
         userRepository.deleteById(id);
     }
 
+    //BookTitle
     public List<BookTitle> getAllBookTitles() {
         return bookTitleRepository.findAll();
     }
@@ -53,10 +54,15 @@ public class DbService {
         return bookTitleRepository.findById(id);
     }
 
+    public void deleteBookTitle(long id) {
+        bookTitleRepository.deleteById(id);
+    }
+
     public BookTitle saveBookTitle(BookTitle bookTitle) {
         return bookTitleRepository.save(bookTitle);
     }
 
+    //CopyBook
     public List<CopyBook> getAllCopyBooks() {
         return copyBookRepository.findAll();
     }
@@ -65,11 +71,28 @@ public class DbService {
         return copyBookRepository.save(copyBook);
     }
 
+    public void deleteCopyBook(long id) {
+        copyBookRepository.deleteById(id);
+    }
+
+    public CopyBook getCopyBook(Long id, String status){
+        return copyBookRepository.findByIdAndStatus(id,status);
+    }
+
+    public long countCopiesBook(String status, Long id) {
+        return copyBookRepository.countByStatusAndBookTitle_Id(status, id);
+    }
+
+    //BorrowBook
     public List<BorrowBook> getAllBorrowBooks() {
         return borrowBookRepository.findAll();
     }
 
     public BorrowBook saveBorrowBook(BorrowBook borrowBook) {
         return borrowBookRepository.save(borrowBook);
+    }
+
+    public void deleteBorrowBook(long id) {
+        borrowBookRepository.deleteById(id);
     }
 }

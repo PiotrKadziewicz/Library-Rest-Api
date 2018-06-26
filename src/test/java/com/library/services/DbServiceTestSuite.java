@@ -40,15 +40,33 @@ public class DbServiceTestSuite {
     public void testSaveUser() {
         //Given
         User user = new User("Kajetan", "Bimbała", LocalDate.of(2018, 06, 04), 10);
+        BookTitle bookTitle = new BookTitle("Book1","Author 1", 2010);
+        CopyBook copyBook = new CopyBook("Free", bookTitle);
+        BorrowBook borrowBook = new BorrowBook(LocalDate.of(2018,06,20),LocalDate.of(2018,06,25),copyBook,user);
 
         //When
         dbService.saveUser(user);
+        dbService.saveBookTitle(bookTitle);
+        dbService.saveCopyBook(copyBook);
+        dbService.saveBorrowBook(borrowBook);
+
         long id = user.getId();
+        long idBT = bookTitle.getId();
+        long idCB = copyBook.getId();
+        long idBB = borrowBook.getId();
 
         //Then
-        Assert.assertEquals(1, dbService.getAllUsers().size());
+
+        Assert.assertEquals(1,dbService.getAllUsers().size());
+        Assert.assertEquals(1,dbService.getAllBookTitles().size());
+        Assert.assertEquals(1,dbService.getAllCopyBooks().size());
+        Assert.assertEquals(1,dbService.getAllBorrowBooks().size());
+        Assert.assertEquals(1,dbService.countCopiesBook("Free",idBT));
 
         //CleanUp
+        dbService.deleteBorrowBook(idBB);
+        dbService.deleteCopyBook(idCB);
+        dbService.deleteBookTitle(idBT);
         dbService.deleteUser(id);
     }
 }

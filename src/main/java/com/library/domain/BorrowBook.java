@@ -44,4 +44,10 @@ public class BorrowBook {
         this.copyBook = copyBook;
         this.user = user;
     }
+
+    public BorrowBook (LocalDate borrowDate, CopyBook copyBook, User user){
+        this.borrowDate=borrowDate;
+        this.copyBook = copyBook;
+        this.user = user;
+    }
 }
