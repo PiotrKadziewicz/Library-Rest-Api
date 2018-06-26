@@ -64,9 +64,9 @@ public class DbServiceTestSuite {
         Assert.assertEquals(1,dbService.countCopiesBook("Free",idBT));
 
         //CleanUp
-        dbService.deleteBorrowBook(idBB);
-        dbService.deleteCopyBook(idCB);
-        dbService.deleteBookTitle(idBT);
-        dbService.deleteUser(id);
+//        dbService.deleteBorrowBook(idBB);
+//        dbService.deleteCopyBook(idCB);
+//        dbService.deleteBookTitle(idBT);
+//        dbService.deleteUser(id);
     }
 }

@@ -62,7 +62,7 @@ public class LibraryController {
         return bookTitleMapper.mapToBookTitleDto(service.saveBookTitle(bookTitleMapper.mapToBookTitle(bookTitleDto)));
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "deleteBook")
+    @RequestMapping(method = RequestMethod.DELETE, value = "deleteBooTitle")
     public void deleteBook(@RequestParam Long id) {
         service.deleteBookTitle(id);
     }
@@ -84,13 +84,17 @@ public class LibraryController {
         return service.countCopiesBook(status, id);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "deleteBook")
+    @RequestMapping(method = RequestMethod.DELETE, value = "deleteCopyBook")
     public void deleteCopyBook(@RequestParam Long id) {
         service.deleteCopyBook(id);
     }
 
 
     //BorrowBook
+    @RequestMapping(method = RequestMethod.GET, value = "getAllBorrowBooks")
+    public List<BorrowBookDto> getAllBorrowBooks(){
+        return borrowBookMapper.mapToBorrowBookDtoList(service.getAllBorrowBooks());
+    }
     @RequestMapping(method = RequestMethod.POST, value = "borrowBook")
     public BorrowBookDto borrowBookDto(@RequestBody BorrowBookDto borrowBookDto) {
         CopyBook copyBook = service.getCopyBook(borrowBookDto.getCopyBookDto().getId(),"Free");
