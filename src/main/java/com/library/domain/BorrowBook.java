@@ -27,7 +27,6 @@ public class BorrowBook {
     private LocalDate borrowDate;
 
     @Column(name = "RETURN_DATE")
-    @NotNull
     private LocalDate returnDate;
 
     @ManyToOne

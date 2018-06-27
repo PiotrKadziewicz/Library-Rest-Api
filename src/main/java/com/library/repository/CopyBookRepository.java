@@ -23,6 +23,7 @@ public interface CopyBookRepository extends CrudRepository<CopyBook, Long> {
     void deleteById(Long id);
 
     Long countByStatusAndBookTitle_Id(String status, Long id);
-
     CopyBook findByIdAndStatus(Long id, String status);
+    List<CopyBook> findAllByBookTitle_IdAndStatus(Long id, String status);
+    CopyBook findByBookTitle_Id(Long id);
 }

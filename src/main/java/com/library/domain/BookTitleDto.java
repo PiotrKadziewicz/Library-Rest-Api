@@ -17,5 +17,12 @@ public class BookTitleDto {
     private String title;
     private String Author;
     private int publicationYear;
+    private long copies;
 
+    public BookTitleDto(long id, String title, String author, int publicationYear) {
+        this.id = id;
+        this.title = title;
+        Author = author;
+        this.publicationYear = publicationYear;
+    }
 }

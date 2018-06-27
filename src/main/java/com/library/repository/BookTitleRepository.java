@@ -22,4 +22,6 @@ public interface BookTitleRepository extends CrudRepository<BookTitle, Long> {
 
     @Override
     void deleteById(Long aLong);
+
+    Optional<BookTitle> getBookTitleByAuthorAndTitle(String author, String Title);
 }
