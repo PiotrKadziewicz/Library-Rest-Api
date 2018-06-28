@@ -34,7 +34,7 @@ public class CopyBook {
             fetch = FetchType.LAZY,
             mappedBy = "copyBook"
     )
-    private List<BorrowBook> borrowBooks = new ArrayList<>();
+    private List<BorrowBook> borrowBooks = new ArrayList<>(); //pozmieniać na Set
 
     public CopyBook(String status, BookTitle bookTitle) {
         this.status = status;

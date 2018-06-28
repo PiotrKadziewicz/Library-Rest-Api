@@ -24,4 +24,5 @@ public interface BookTitleRepository extends CrudRepository<BookTitle, Long> {
     void deleteById(Long aLong);
 
     Optional<BookTitle> getBookTitleByAuthorAndTitle(String author, String Title);
+    Optional<BookTitle> findByAuthorAndTitle(String author, String title);
 }

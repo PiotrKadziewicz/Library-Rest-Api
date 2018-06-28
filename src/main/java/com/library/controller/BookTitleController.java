@@ -28,31 +28,27 @@ public class BookTitleController {
     @RequestMapping(method = RequestMethod.GET, value = "getAllBooks")
     public List<BookTitleDto> getAllBooks() {
         List<BookTitleDto> bookTitleDtoList = bookTitleMapper.mapToBookTitleDtoList(service.getAllBookTitles());
-        bookTitleDtoList.stream().forEach(b -> b.setCopies(countBookCopies("Free", b.getId())));
+        bookTitleDtoList.stream().forEach(b -> b.setCopies(copyBookService.countCopiesBook("Free", b.getId())));
         return bookTitleDtoList;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "getBookWithCopies")
-    public BookTitleDto getBookWithCopies(@RequestParam Long bookTitleId){
-        BookTitleDto bookTitleDto= bookTitleMapper.mapToBookTitleDto(service.getBookTitle(bookTitleId).orElse(null));
-        bookTitleDto.setCopies(countBookCopies("Free",bookTitleId));
+    public BookTitleDto getBookWithCopies(@RequestParam Long bookTitleId) {
+        BookTitleDto bookTitleDto = bookTitleMapper.mapToBookTitleDto(service.getBookTitle(bookTitleId).orElse(null));
+        bookTitleDto.setCopies(copyBookService.countCopiesBook("Free", bookTitleId));
         return bookTitleDto;
-    }
-
-    private long countBookCopies(String status, Long id){
-        return copyBookService.countCopiesBook(status,id);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "addBookTitle")
     public BookTitleDto addBook(@RequestBody BookTitleDto bookTitleDto) {
-        if (service.getBookTitleByAuthorAndId(bookTitleDto.getAuthor(), bookTitleDto.getTitle())) {
-
-            copyBookService.saveCopyBook(new CopyBook("Free", service.getBookTitle(bookTitleDto.getId()).orElse(null)));
-            return bookTitleDto;
-        }else{
-            BookTitleDto bookTitleDto1 = bookTitleMapper.mapToBookTitleDto(service.saveBookTitle(bookTitleMapper.mapToBookTitle(bookTitleDto)));
-            copyBookService.saveCopyBook(new CopyBook("Free", bookTitleMapper.mapToBookTitle(bookTitleDto1)));
-            return bookTitleDto;
+        if (service.getBookTitleByAuthorAndTitle(bookTitleDto.getAuthor(), bookTitleDto.getTitle()).isPresent()) {
+            BookTitle bookTitle = service.getBookTitleByAuthorAndTitle(bookTitleDto.getAuthor(), bookTitleDto.getTitle()).orElse(null);
+            copyBookService.saveCopyBook(new CopyBook("Free", service.getBookTitle(bookTitle.getId()).orElse(null)));
+            return bookTitleMapper.mapToBookTitleDto(bookTitle);
+        } else {
+            BookTitle bookTitle = service.saveBookTitle(bookTitleMapper.mapToBookTitle(bookTitleDto));
+            copyBookService.saveCopyBook(new CopyBook("Free", bookTitle));
+            return bookTitleMapper.mapToBookTitleDto(bookTitle);
         }
     }
 

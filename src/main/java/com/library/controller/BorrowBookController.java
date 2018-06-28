@@ -3,6 +3,7 @@ package com.library.controller;
 import com.library.domain.*;
 import com.library.mapper.BorrowBookMapper;
 import com.library.repository.CopyBookRepository;
+import com.library.service.BookTitleDbService;
 import com.library.service.BorrowBookDbService;
 import com.library.service.CopyBookDbService;
 import com.library.service.UserDbService;
@@ -28,6 +29,9 @@ public class BorrowBookController {
     @Autowired
     private UserDbService userService;
 
+    @Autowired
+    private BookTitleDbService bookTitleDbService;
+
     //BorrowBook
     @RequestMapping(method = RequestMethod.GET, value = "getAllBorrowBooks")
     public List<BorrowBookDto> getAllBorrowBooks() {
@@ -35,62 +39,37 @@ public class BorrowBookController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "borrowBook")
-    public BorrowBookDto borrowBookDto(@RequestBody BorrowBookDto borrowBookDto) {
-        User user = userService.getUser(borrowBookDto.getUserDto().getId()).orElse(null);
-        return rentBook(borrowBookDto.getCopyBookDto().getBookTitleDto().getId(), user);
-    }
-
-    @RequestMapping(method = RequestMethod.POST, value = "borrowBookByIds")
-    public BorrowBookDto borrowBookDto(@RequestParam(value = "bookTitleId") Long bookId, @RequestParam(value = "userId") Long userId) {
-        User user = userService.getUser(userId).orElse(null);
-        if (user.getAccount() < 3) {
-            return null;
-        } else {
-            return rentBook(bookId, user);
+    public BorrowBookDto borrowBookDto(@RequestParam String author, @RequestParam String title, @RequestParam(value = "userId") Long userId) {
+        if (bookTitleDbService.getBookTitleByAuthorAndTitle(author, title).isPresent()) {
+            BookTitle bookTitle = bookTitleDbService.getBookTitleByAuthorAndTitle(author, title).orElse(null);
+            List<CopyBook> freeBooks = copyBookService.getAllCopyBookByIdAndStatus(bookTitle.getId(), "Free");
+            User user = userService.getUser(userId).orElse(null);
+            if (!freeBooks.isEmpty() && user.getAccount() >= 3) {
+                CopyBook copyBook = freeBooks.get(0);
+                copyBook.setStatus("Borrowed");
+                copyBookService.saveCopyBook(copyBook);
+                BorrowBook borrowBook = new BorrowBook(LocalDate.now(), copyBook, user);
+                service.saveBorrowBook(borrowBook);
+                return borrowBookMapper.mapToBorrowBookDto(borrowBook);
+            }
         }
-
+        return null;
     }
-
-    private BorrowBookDto rentBook(Long id, User user) {
-        List<CopyBook> freeBoks = copyBookService.getAllCopyBookByIdAndStatus(id, "Free");
-        if (freeBoks.size() > 0) {
-            CopyBook copyBook = freeBoks.get(0);
-            copyBook.setStatus("Borrowed");
-            copyBookService.saveCopyBook(copyBook);
-            BorrowBook borrowBook = new BorrowBook(LocalDate.now(), copyBook, user);
-            return borrowBookMapper.mapToBorrowBookDto(borrowBook);
-        } else
-            return null;
-    }
-
-    // Return book
-//    @RequestMapping(method = RequestMethod.PUT, value = "returnBook")
-//    public BorrowBookDto returnbook(@RequestParam Long borrowBookId) {
-//        BorrowBook borrowBook = service.getBorrowBookById(borrowBookId);
-//        borrowBook.setReturnDate(LocalDate.now());
-//        borrowBook.getCopyBook().setStatus("Free");
-//        service.saveBorrowBook(borrowBook);
-//        return borrowBookMapper.mapToBorrowBookDto(borrowBook);
-//    }
 
     @RequestMapping(method = RequestMethod.PUT, value = "returnBookByIds")
     public BorrowBookDto returnBookByIds(@RequestParam(value = "copyBookId") Long bookId, @RequestParam(value = "userId") Long userId) throws NotFoundException {
-        try {
-            BorrowBook borrowBook = service.getBorrowBookByCopyAndUserIds(bookId, userId);
-            borrowBook.setReturnDate(LocalDate.now());
-            Period period = Period.between(borrowBook.getBorrowDate(), borrowBook.getReturnDate());
-            if (period.getMonths() > 1 || period.getYears() > 0) {
+        BorrowBook borrowBook = service.getBorrowBookByCopyAndUserIds(bookId, userId);
+        borrowBook.setReturnDate(LocalDate.now());
+        Period period = Period.between(borrowBook.getBorrowDate(), borrowBook.getReturnDate());
+        if (period.getMonths() > 1 || period.getYears() > 0) {
+            if (userService.getUser(userId).isPresent()) {
                 User user = userService.getUser(userId).orElse(null);
-                if (user != null) {
-                    user.setAccount(user.getAccount() - 3.0);
-                    userService.saveUser(user);
-                }
+                user.setAccount(user.getAccount() - 3.0);
+                userService.saveUser(user);
             }
-            borrowBook.getCopyBook().setStatus("Free");
-            service.saveBorrowBook(borrowBook);
-            return borrowBookMapper.mapToBorrowBookDto(borrowBook);
-        } catch (NotFoundException e) {
-            throw new NotFoundException();
         }
+        borrowBook.getCopyBook().setStatus("Free");
+        service.saveBorrowBook(borrowBook);
+        return borrowBookMapper.mapToBorrowBookDto(borrowBook);
     }
 }

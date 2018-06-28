@@ -29,7 +29,11 @@ public class BookTitleDbService {
         return bookTitleRepository.save(bookTitle);
     }
 
-    public boolean getBookTitleByAuthorAndId(String author, String title){
+    public boolean getBookTitleByAuthorAndId(String author, String title){ //?????????????????????????
         return bookTitleRepository.getBookTitleByAuthorAndTitle(author,title).isPresent();
+    }
+
+    public Optional<BookTitle> getBookTitleByAuthorAndTitle(String author, String title){
+        return bookTitleRepository.findByAuthorAndTitle(author,title);
     }
 }
