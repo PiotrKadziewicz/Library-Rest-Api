@@ -30,6 +30,7 @@ public class CopyBook {
 
     @OneToMany(
             targetEntity = BorrowBook.class,
+            cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY,
             mappedBy = "copyBook"
     )

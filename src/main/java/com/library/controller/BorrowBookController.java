@@ -48,6 +48,7 @@ public class BorrowBookController {
         } else {
             return rentBook(bookId, user);
         }
+
     }
 
     private BorrowBookDto rentBook(Long id, User user) {
@@ -73,12 +74,12 @@ public class BorrowBookController {
 //    }
 
     @RequestMapping(method = RequestMethod.PUT, value = "returnBookByIds")
-    public BorrowBookDto returnBookByIds(@RequestParam(value = "bookTitleId") Long bookId, @RequestParam(value = "userId") Long userId) throws NotFoundException {
+    public BorrowBookDto returnBookByIds(@RequestParam(value = "copyBookId") Long bookId, @RequestParam(value = "userId") Long userId) throws NotFoundException {
         try {
             BorrowBook borrowBook = service.getBorrowBookByCopyAndUserIds(bookId, userId);
             borrowBook.setReturnDate(LocalDate.now());
             Period period = Period.between(borrowBook.getBorrowDate(), borrowBook.getReturnDate());
-            if (period.getMonths() > 2) {
+            if (period.getMonths() > 1 || period.getYears() > 0) {
                 User user = userService.getUser(userId).orElse(null);
                 if (user != null) {
                     user.setAccount(user.getAccount() - 3.0);

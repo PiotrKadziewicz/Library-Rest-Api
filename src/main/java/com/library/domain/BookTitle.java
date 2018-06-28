@@ -36,6 +36,7 @@ public class BookTitle {
 
     @OneToMany(
             targetEntity = CopyBook.class,
+            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "bookTitle"
     )

@@ -43,6 +43,7 @@ public class User {
 
     @OneToMany(
             targetEntity = BorrowBook.class,
+            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "user"
     )

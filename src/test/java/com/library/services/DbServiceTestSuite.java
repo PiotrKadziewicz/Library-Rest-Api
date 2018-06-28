@@ -5,6 +5,10 @@ import com.library.mapper.BookTitleMapper;
 import com.library.mapper.BorrowBookMapper;
 import com.library.mapper.CopyBookMapper;
 import com.library.mapper.UserMapper;
+import com.library.service.BookTitleDbService;
+import com.library.service.BorrowBookDbService;
+import com.library.service.CopyBookDbService;
+import com.library.service.UserDbService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +22,16 @@ import java.time.LocalDate;
 @SpringBootTest
 public class DbServiceTestSuite {
     @Autowired
-    private DbService dbService;
+    private UserDbService userDbService;
+
+    @Autowired
+    private BookTitleDbService bookTitleDbService;
+
+    @Autowired
+    private CopyBookDbService copyBookDbService;
+
+    @Autowired
+    private BorrowBookDbService borrowBookDbService;
 
     @Autowired
     private UserMapper userMapper;
@@ -36,16 +49,16 @@ public class DbServiceTestSuite {
     @Test
     public void testSaveUser() {
         //Given
-        User user = new User("Kajetan", "Bimbała", LocalDate.of(2018, 06, 04), 10);
-        BookTitle bookTitle = new BookTitle("Book1","Author 1", 2010);
+        User user = new User("Jan", "Kowalski", LocalDate.of(2015, 06, 04), 10);
+        BookTitle bookTitle = new BookTitle("Title 1 ","Kajtek", 2011);
         CopyBook copyBook = new CopyBook("Free", bookTitle);
-        BorrowBook borrowBook = new BorrowBook(LocalDate.of(2018,06,20),LocalDate.of(2018,06,25),copyBook,user);
+        BorrowBook borrowBook = new BorrowBook(LocalDate.of(2017,06,20),copyBook,user);
 
         //When
-        dbService.saveUser(user);
-        dbService.saveBookTitle(bookTitle);
-        dbService.saveCopyBook(copyBook);
-        dbService.saveBorrowBook(borrowBook);
+        userDbService.saveUser(user);
+        bookTitleDbService.saveBookTitle(bookTitle);
+        copyBookDbService.saveCopyBook(copyBook);
+        borrowBookDbService.saveBorrowBook(borrowBook);
 
         long id = user.getId();
         long idBT = bookTitle.getId();
@@ -54,16 +67,46 @@ public class DbServiceTestSuite {
 
         //Then
 
-        Assert.assertEquals(1,dbService.getAllUsers().size());
-        Assert.assertEquals(1,dbService.getAllBookTitles().size());
-        Assert.assertEquals(1,dbService.getAllCopyBooks().size());
-        Assert.assertEquals(1,dbService.getAllBorrowBooks().size());
-        Assert.assertEquals(1,dbService.countCopiesBook("Free",idBT));
+        Assert.assertEquals(1,userDbService.getAllUsers().size());
+        Assert.assertEquals(1,bookTitleDbService.getAllBookTitles().size());
+        Assert.assertEquals(1,copyBookDbService.getAllCopyBooks().size());
+        Assert.assertEquals(1,borrowBookDbService.getAllBorrowBooks().size());
+        Assert.assertEquals(1,copyBookDbService.countCopiesBook("Free",idBT));
 
         //CleanUp
-//        dbService.deleteBorrowBook(idBB);
-//        dbService.deleteCopyBook(idCB);
-//        dbService.deleteBookTitle(idBT);
-//        dbService.deleteUser(id);
+        bookTitleDbService.deleteBookTitle(idBT);
+        userDbService.deleteUser(id);
+    }
+    @Test
+    public void addDate(){
+        User user = new User("Piotr", "Nowak", LocalDate.of(2015, 06, 04), 10);
+        BookTitle bookTitle = new BookTitle("Hobbit","J.R.R. Tolkien", 2011);
+        CopyBook copyBook = new CopyBook("Borrowed", bookTitle);
+        BorrowBook borrowBook = new BorrowBook(LocalDate.of(2017,06,20),copyBook,user);
+
+        //When
+        userDbService.saveUser(user);
+        bookTitleDbService.saveBookTitle(bookTitle);
+        copyBookDbService.saveCopyBook(copyBook);
+        borrowBookDbService.saveBorrowBook(borrowBook);
+
+        User user1 = new User("Jan", "Kowalski", LocalDate.of(2015, 06, 04), 10);
+        BookTitle bookTitle1 = new BookTitle("ASP.NET CORE MVC 2","Adam Freeman", 2018);
+        CopyBook copyBook1 = new CopyBook("Free", bookTitle1);
+
+        //When
+        userDbService.saveUser(user1);
+        bookTitleDbService.saveBookTitle(bookTitle1);
+        copyBookDbService.saveCopyBook(copyBook1);
+
+
+        User user2 = new User("Grzegorz", "Brzęczyszczykiewicz", LocalDate.of(2015, 06, 04), 10);
+        BookTitle bookTitle2 = new BookTitle("PORADNIK PRZETRWANIA W ŻYCIU","Bear Grylls", 2013);
+        CopyBook copyBook2 = new CopyBook("Free", bookTitle2);
+
+        //When
+        userDbService.saveUser(user2);
+        bookTitleDbService.saveBookTitle(bookTitle2);
+        copyBookDbService.saveCopyBook(copyBook2);
     }
 }
