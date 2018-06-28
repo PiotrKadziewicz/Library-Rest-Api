@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/library")
@@ -41,8 +42,9 @@ public class BookTitleController {
 
     @RequestMapping(method = RequestMethod.POST, value = "addBookTitle")
     public BookTitleDto addBook(@RequestBody BookTitleDto bookTitleDto) {
-        if (service.getBookTitleByAuthorAndTitle(bookTitleDto.getAuthor(), bookTitleDto.getTitle()).isPresent()) {
-            BookTitle bookTitle = service.getBookTitleByAuthorAndTitle(bookTitleDto.getAuthor(), bookTitleDto.getTitle()).orElse(null);
+        Optional<BookTitle> bookTitleOptional = service.getBookTitleByAuthorAndTitle(bookTitleDto.getAuthor(), bookTitleDto.getTitle());
+        if (bookTitleOptional.isPresent()) {
+            BookTitle bookTitle = bookTitleOptional.orElse(null);
             copyBookService.saveCopyBook(new CopyBook("Free", service.getBookTitle(bookTitle.getId()).orElse(null)));
             return bookTitleMapper.mapToBookTitleDto(bookTitle);
         } else {

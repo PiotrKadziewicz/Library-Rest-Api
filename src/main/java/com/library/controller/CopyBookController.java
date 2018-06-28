@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/library")
@@ -29,8 +30,9 @@ public class CopyBookController {
 
     @RequestMapping(method = RequestMethod.GET, value = "getCopiesByStatusAndAuthorAndTitle")
     public long getFreeCopiesByAuthorAndTitle(@RequestParam(value = "status") String status, @RequestParam String author, String title) {
-        if (bookTitleDbService.getBookTitleByAuthorAndTitle(author, title).isPresent()) {
-            BookTitle bookTitle = bookTitleDbService.getBookTitleByAuthorAndTitle(author, title).orElse(null);
+        Optional<BookTitle> bookTitleOptional = bookTitleDbService.getBookTitleByAuthorAndTitle(author, title);
+        if (bookTitleOptional.isPresent()) {
+            BookTitle bookTitle = bookTitleOptional.orElse(null);
             return service.countCopiesBook(status, bookTitle.getId());
         }
         return 0;

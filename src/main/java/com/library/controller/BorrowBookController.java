@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/library")
@@ -62,8 +63,9 @@ public class BorrowBookController {
         borrowBook.setReturnDate(LocalDate.now());
         long monthsBetween = ChronoUnit.MONTHS.between(borrowBook.getBorrowDate(), borrowBook.getReturnDate());
         if (monthsBetween > 2) {
-            if (userService.getUser(userId).isPresent()) {
-                User user = userService.getUser(userId).orElse(null);
+            Optional<User> userOptional = userService.getUser(userId);
+            if (userOptional.isPresent()) {
+                User user = userOptional.orElse(null);
                 user.setAccount(user.getAccount() - 3.0);
                 userService.saveUser(user);
             }
