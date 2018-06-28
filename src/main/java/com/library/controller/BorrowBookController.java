@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RestController
@@ -39,7 +39,7 @@ public class BorrowBookController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "borrowBook")
-    public BorrowBookDto borrowBookDto(@RequestParam String author, @RequestParam String title, @RequestParam(value = "userId") Long userId) {
+    public BorrowBookDto borrowBookDto(@RequestParam String author, @RequestParam String title, @RequestParam(value = "userId") Long userId) throws UserAccountException {
         if (bookTitleDbService.getBookTitleByAuthorAndTitle(author, title).isPresent()) {
             BookTitle bookTitle = bookTitleDbService.getBookTitleByAuthorAndTitle(author, title).orElse(null);
             List<CopyBook> freeBooks = copyBookService.getAllCopyBookByIdAndStatus(bookTitle.getId(), "Free");
@@ -53,15 +53,15 @@ public class BorrowBookController {
                 return borrowBookMapper.mapToBorrowBookDto(borrowBook);
             }
         }
-        return null;
+        throw new UserAccountException("No book or not enought money in your account");
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "returnBookByIds")
     public BorrowBookDto returnBookByIds(@RequestParam(value = "copyBookId") Long bookId, @RequestParam(value = "userId") Long userId) throws NotFoundException {
         BorrowBook borrowBook = service.getBorrowBookByCopyAndUserIds(bookId, userId);
         borrowBook.setReturnDate(LocalDate.now());
-        Period period = Period.between(borrowBook.getBorrowDate(), borrowBook.getReturnDate());
-        if (period.getMonths() > 1 || period.getYears() > 0) {
+        long monthsBetween = ChronoUnit.MONTHS.between(borrowBook.getBorrowDate(), borrowBook.getReturnDate());
+        if (monthsBetween > 2) {
             if (userService.getUser(userId).isPresent()) {
                 User user = userService.getUser(userId).orElse(null);
                 user.setAccount(user.getAccount() - 3.0);
