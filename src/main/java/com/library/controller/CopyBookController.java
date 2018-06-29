@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/library")
@@ -24,7 +25,7 @@ public class CopyBookController {
     private BookTitleDbService bookTitleDbService;
 
     @RequestMapping(method = RequestMethod.GET, value = "getAllCopyBooks")
-    public List<CopyBookDto> getAllCopyBooks() {
+    public Set<CopyBookDto> getAllCopyBooks() {
         return copyBookMapper.mapToCopyBookDtoList(service.getAllCopyBooks());
     }
 

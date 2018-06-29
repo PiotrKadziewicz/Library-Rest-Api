@@ -7,7 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,7 +36,7 @@ public class CopyBook {
             fetch = FetchType.LAZY,
             mappedBy = "copyBook"
     )
-    private List<BorrowBook> borrowBooks = new ArrayList<>(); //pozmieniać na Set
+    private Set<BorrowBook> borrowBooks = new HashSet<>();
 
     public CopyBook(String status, BookTitle bookTitle) {
         this.status = status;

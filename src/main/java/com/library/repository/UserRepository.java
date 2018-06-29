@@ -7,12 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Transactional
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
     @Override
-    List<User> findAll();
+    Set<User> findAll();
 
     @Override
     Optional<User> findById(Long id);

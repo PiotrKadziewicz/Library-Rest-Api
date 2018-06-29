@@ -7,13 +7,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BookTitleDbService {
     @Autowired
     private BookTitleRepository bookTitleRepository;
 
-    public List<BookTitle> getAllBookTitles() {
+    public Set<BookTitle> getAllBookTitles() {
         return bookTitleRepository.findAll();
     }
 
@@ -27,10 +28,6 @@ public class BookTitleDbService {
 
     public BookTitle saveBookTitle(BookTitle bookTitle) {
         return bookTitleRepository.save(bookTitle);
-    }
-
-    public boolean getBookTitleByAuthorAndId(String author, String title){ //?????????????????????????
-        return bookTitleRepository.getBookTitleByAuthorAndTitle(author,title).isPresent();
     }
 
     public Optional<BookTitle> getBookTitleByAuthorAndTitle(String author, String title){

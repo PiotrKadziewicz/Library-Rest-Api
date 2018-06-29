@@ -5,6 +5,7 @@ import com.library.domain.UserDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -27,17 +28,10 @@ public class UserMapper {
                 user.getAccount());
     }
 
-    public List<UserDto> mapToUserDtoList(final List<User> userList) {
+    public Set<UserDto> mapToUserDtoList(final Set<User> userList) {
         return userList.stream()
                 .map(u -> new UserDto(u.getId(), u.getName(), u.getLastName(), u.getCreationDate(), u.getAccount()))
-                .collect(Collectors.toList());
-
-    }
-
-    public List<User> mapToUserList(final List<UserDto> userDtoList) {
-        return userDtoList.stream()
-                .map(u -> new User(u.getId(), u.getName(), u.getLastName(), u.getCreationDate(), u.getAccount()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
     }
 }

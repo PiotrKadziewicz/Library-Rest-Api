@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class BookTitleMapper {
-    @Autowired
-    private CopyBookMapper copyBookMapper;
 
     public BookTitle mapToBookTitle(final BookTitleDto bookTitleDto) {
         return new BookTitle(
@@ -31,9 +30,9 @@ public class BookTitleMapper {
         );
     }
 
-    public List<BookTitleDto> mapToBookTitleDtoList(final List<BookTitle> bookTitlesList) {
+    public Set<BookTitleDto> mapToBookTitleDtoList(final Set<BookTitle> bookTitlesList) {
         return bookTitlesList.stream()
                 .map(b -> new BookTitleDto(b.getId(), b.getTitle(), b.getAuthor(), b.getPublicationYear()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 }

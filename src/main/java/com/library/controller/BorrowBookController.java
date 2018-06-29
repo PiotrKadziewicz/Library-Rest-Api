@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/library")
@@ -35,7 +36,7 @@ public class BorrowBookController {
 
     //BorrowBook
     @RequestMapping(method = RequestMethod.GET, value = "getAllBorrowBooks")
-    public List<BorrowBookDto> getAllBorrowBooks() {
+    public Set<BorrowBookDto> getAllBorrowBooks() {
         return borrowBookMapper.mapToBorrowBookDtoList(service.getAllBorrowBooks());
     }
 
@@ -43,10 +44,10 @@ public class BorrowBookController {
     public BorrowBookDto borrowBookDto(@RequestParam String author, @RequestParam String title, @RequestParam(value = "userId") Long userId) throws UserAccountException {
         if (bookTitleDbService.getBookTitleByAuthorAndTitle(author, title).isPresent()) {
             BookTitle bookTitle = bookTitleDbService.getBookTitleByAuthorAndTitle(author, title).orElse(null);
-            List<CopyBook> freeBooks = copyBookService.getAllCopyBookByIdAndStatus(bookTitle.getId(), "Free");
+            Set<CopyBook> freeBooks = copyBookService.getAllCopyBookByIdAndStatus(bookTitle.getId(), "Free");
             User user = userService.getUser(userId).orElse(null);
             if (!freeBooks.isEmpty() && user.getAccount() >= 3) {
-                CopyBook copyBook = freeBooks.get(0);
+                CopyBook copyBook = freeBooks.stream().findFirst().get();
                 copyBook.setStatus("Borrowed");
                 copyBookService.saveCopyBook(copyBook);
                 BorrowBook borrowBook = new BorrowBook(LocalDate.now(), copyBook, user);

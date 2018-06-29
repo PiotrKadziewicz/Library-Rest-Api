@@ -9,12 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Transactional
 @Repository
 public interface CopyBookRepository extends CrudRepository<CopyBook, Long> {
     @Override
-    List<CopyBook> findAll();
+    Set<CopyBook> findAll();
 
     @Override
     CopyBook save(CopyBook copyBook);
@@ -23,7 +24,6 @@ public interface CopyBookRepository extends CrudRepository<CopyBook, Long> {
     void deleteById(Long id);
 
     Long countByStatusAndBookTitle_Id(String status, Long id);
-    CopyBook findByIdAndStatus(Long id, String status);
-    List<CopyBook> findAllByBookTitle_IdAndStatus(Long id, String status);
+    Set<CopyBook> findAllByBookTitle_IdAndStatus(Long id, String status);
     CopyBook findByBookTitle_Id(Long id);
 }

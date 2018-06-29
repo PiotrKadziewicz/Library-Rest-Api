@@ -11,7 +11,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,7 +49,7 @@ public class User {
             fetch = FetchType.LAZY,
             mappedBy = "user"
     )
-    private List<BorrowBook> borrowBooks = new ArrayList<>();
+    private Set<BorrowBook> borrowBooks = new HashSet<>();
 
     public User(String name, String lastName, LocalDate creationDate, double account) {
         this.name = name;

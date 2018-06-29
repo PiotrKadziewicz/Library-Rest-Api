@@ -7,26 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BorrowBookDbService {
     @Autowired
     private BorrowBookRepository borrowBookRepository;
 
-    public List<BorrowBook> getAllBorrowBooks() {
+    public Set<BorrowBook> getAllBorrowBooks() {
         return borrowBookRepository.findAll();
     }
 
     public BorrowBook saveBorrowBook(BorrowBook borrowBook) {
         return borrowBookRepository.save(borrowBook);
-    }
-
-    public void deleteBorrowBook(long id) {
-        borrowBookRepository.deleteById(id);
-    }
-
-    public BorrowBook getBorrowBookById(Long id){
-        return borrowBookRepository.findById(id).orElse(null);
     }
 
     public BorrowBook getBorrowBookByCopyAndUserIds(Long bookId, Long userId) throws NotFoundException {

@@ -7,12 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Transactional
 @Repository
 public interface BookTitleRepository extends CrudRepository<BookTitle, Long> {
     @Override
-    List<BookTitle> findAll();
+    Set<BookTitle> findAll();
 
     @Override
     Optional<BookTitle> findById(Long id);
@@ -23,6 +24,5 @@ public interface BookTitleRepository extends CrudRepository<BookTitle, Long> {
     @Override
     void deleteById(Long aLong);
 
-    Optional<BookTitle> getBookTitleByAuthorAndTitle(String author, String Title);
     Optional<BookTitle> findByAuthorAndTitle(String author, String title);
 }

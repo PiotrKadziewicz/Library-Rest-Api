@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CopyBookDbService {
     @Autowired
     private CopyBookRepository copyBookRepository;
 
-    public List<CopyBook> getAllCopyBooks() {
+    public Set<CopyBook> getAllCopyBooks() {
         return copyBookRepository.findAll();
     }
 
@@ -24,15 +25,11 @@ public class CopyBookDbService {
         copyBookRepository.deleteById(id);
     }
 
-    public List<CopyBook> getAllCopyBookByIdAndStatus(Long id, String status) {
+    public Set<CopyBook> getAllCopyBookByIdAndStatus(Long id, String status) {
         return copyBookRepository.findAllByBookTitle_IdAndStatus(id, status);
     }
 
     public long countCopiesBook(String status, Long id) {
         return copyBookRepository.countByStatusAndBookTitle_Id(status, id);
-    }
-
-    public CopyBook copyBookByTitleId(Long id) {
-        return copyBookRepository.findByBookTitle_Id(id);
     }
 }

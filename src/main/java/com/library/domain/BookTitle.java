@@ -8,7 +8,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,7 +42,7 @@ public class BookTitle {
             fetch = FetchType.LAZY,
             mappedBy = "bookTitle"
     )
-    private List<CopyBook> copyBooks = new ArrayList<>();
+    private Set<BorrowBook> borrowBooks = new HashSet<>();
 
     public BookTitle(String title, String author, int publicationYear) {
         this.author = author;

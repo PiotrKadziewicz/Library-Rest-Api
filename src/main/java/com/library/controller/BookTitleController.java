@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/library")
@@ -27,8 +28,8 @@ public class BookTitleController {
     private CopyBookDbService copyBookService;
 
     @RequestMapping(method = RequestMethod.GET, value = "getAllBooks")
-    public List<BookTitleDto> getAllBooks() {
-        List<BookTitleDto> bookTitleDtoList = bookTitleMapper.mapToBookTitleDtoList(service.getAllBookTitles());
+    public Set<BookTitleDto> getAllBooks() {
+        Set<BookTitleDto> bookTitleDtoList = bookTitleMapper.mapToBookTitleDtoList(service.getAllBookTitles());
         bookTitleDtoList.stream().forEach(b -> b.setCopies(copyBookService.countCopiesBook("Free", b.getId())));
         return bookTitleDtoList;
     }

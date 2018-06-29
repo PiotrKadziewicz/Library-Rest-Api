@@ -6,10 +6,11 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface BorrowBookRepository extends CrudRepository<BorrowBook,Long> {
     @Override
-    List<BorrowBook> findAll();
+    Set<BorrowBook> findAll();
 
     @Override
     BorrowBook save(BorrowBook borrowBook);
@@ -19,6 +20,5 @@ public interface BorrowBookRepository extends CrudRepository<BorrowBook,Long> {
 
     @Override
     Optional<BorrowBook> findById(Long id);
-
     Optional<BorrowBook> findByCopyBook_IdAndUser_Id(Long bookId, Long userId);
 }
